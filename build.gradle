@@ -2,20 +2,30 @@ buildscript {
     repositories {
         google()
         jcenter()
+
+        // For build scan nightlies
+        maven { url 'https://repo.gradle.org/gradle/enterprise-libs-snapshots-local' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.0-rc01'
+        classpath 'com.gradle:build-scan-plugin:latest.integration'//2.1-20181127204740-master
     }
 }
 
-plugins {
-    id 'com.gradle.build-scan' version '1.16'
-}
-
+apply plugin: "com.gradle.build-scan"
 buildScan {
     publishAlways()
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
+
+    def scanServer = System.getenv("GE_EXPERIMENT")
+    if (scanServer != null) {
+        // Using GE experimental server
+        server = scanServer
+        captureTaskInputFiles = true
+    } else {
+        // We're using the public server
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
 }
 
 allprojects {

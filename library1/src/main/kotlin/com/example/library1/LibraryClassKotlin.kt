@@ -1,4 +1,9 @@
 package com.example.library1
 
-class LibraryClassKotlin {
+import dagger.Module
+import dagger.Provides
+
+@Module
+object LibraryClassKotlin {
+    @Provides @JvmStatic fun newString() = "Hello"
 }

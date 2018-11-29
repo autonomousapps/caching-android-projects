@@ -30,10 +30,13 @@ buildScan {
     }
 }
 
-allprojects {
+subprojects {
     repositories {
         google()
         jcenter()
+    }
+    pluginManager.withPlugin("kotlin-kapt") {
+        kapt.useBuildCache = true
     }
 }
 
